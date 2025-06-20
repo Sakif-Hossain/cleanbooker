@@ -12,3 +12,5 @@ The platform is targeted towards two primary audiences:
 - **KleenScape administrators**, who require real-time insights into business operations through an integrated dashboard that summarizes key metrics such as appointment volume, service types, and customer data.
 
 By connecting clients and providers through a single, user-friendly platform, CleanBooker enhances service delivery, simplifies internal workflows, and positions KleenScape for future growth in the digital space.
+
+Author - Sheikh Safwan Hossain
