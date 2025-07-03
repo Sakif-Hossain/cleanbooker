@@ -137,3 +137,6 @@ dist
 .pnp.*
 
 venv
+
+# mac stuff
+*.DS_Store
