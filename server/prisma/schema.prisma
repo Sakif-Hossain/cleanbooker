@@ -8,20 +8,470 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique
-  bookings  Booking[]
-  createdAt DateTime  @default(now())
+// Business/Admin Users (who own the cleaning service)
+model Business {
+  id           String  @id @default(uuid())
+  businessName String
+  ownerName    String
+  email        String  @unique
+  password     String
+  phone        String
+  isVerified   Boolean @default(false)
+  isActive     Boolean @default(true)
+
+  // Address information
+  street  String
+  city    String
+  state   String
+  zipCode String
+  country String @default("Canada")
+
+  // Business settings
+  logoUrl     String?
+  website     String?
+  description String?
+
+  // Service area (array of zip codes or cities)
+  serviceArea String[] @default([])
+
+  // Business hours (JSON field)
+  businessHours Json @default("{}")
+
+  // Relations
+  customers     Customer[]
+  bookings      Booking[]
+  services      Service[]
+  employees     Employee[]
+  campaigns     Campaign[]
+  notifications Notification[]
+  reviews       Review[]
+  refreshTokens RefreshToken[]
+
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  CustomerNote CustomerNote[]
+  Lead         Lead[]
+
+  @@map("businesses")
 }
 
+// Employees of the cleaning service
+model Employee {
+  id        String       @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String       @unique
+  phone     String
+  password  String
+  role      EmployeeRole @default(CLEANER)
+  isActive  Boolean      @default(true)
+
+  // Employee details
+  hireDate   DateTime @default(now())
+  hourlyRate Decimal? @db.Decimal(10, 2)
+
+  // Relations
+  business   Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+  bookings   Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("employees")
+}
+
+// Customers who book cleaning services
+model Customer {
+  id        String         @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  status    CustomerStatus @default(POTENTIAL)
+
+  // Address information
+  street  String
+  city    String
+  state   String
+  zipCode String
+
+  // Property details
+  propertyType           PropertyType  @default(HOUSE)
+  propertySize           Int? // square feet
+  specialInstructions    String?
+  preferredContactMethod ContactMethod @default(EMAIL)
+
+  // Marketing
+  howDidYouHear String?
+
+  // Relations
+  business   Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+  bookings   Booking[]
+  notes      CustomerNote[]
+  reviews    Review[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, businessId])
+  @@index([email])
+  @@index([phone])
+  @@index([businessId, status])
+  @@map("customers")
+}
+
+// Customer notes for CRM
+model CustomerNote {
+  id      String   @id @default(uuid())
+  content String
+  type    NoteType @default(GENERAL)
+
+  // Relations
+  customer   Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+
+  createdAt DateTime @default(now())
+
+  @@map("customer_notes")
+}
+
+// Services offered by the cleaning business
+model Service {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  basePrice   Decimal         @db.Decimal(10, 2)
+  duration    Int // minutes
+  category    ServiceCategory @default(REGULAR)
+  isActive    Boolean         @default(true)
+
+  // Relations
+  business   Business       @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+  addOns     ServiceAddOn[]
+  bookings   Booking[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId, isActive])
+  @@map("services")
+}
+
+// Add-on services
+model ServiceAddOn {
+  id       String  @id @default(uuid())
+  name     String
+  price    Decimal @db.Decimal(10, 2)
+  duration Int // minutes
+
+  // Relations
+  service   Service        @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  serviceId String
+  bookings  BookingAddOn[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("service_add_ons")
+}
+
+// Main booking entity
 model Booking {
-  id         String   @id @default(uuid())
-  date       DateTime
-  service    String
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  createdAt  DateTime @default(now())
+  id                String        @id @default(uuid())
+  scheduledDate     DateTime
+  estimatedDuration Int // minutes
+  actualDuration    Int? // minutes (filled after completion)
+  status            BookingStatus @default(PENDING)
+
+  // Address (can be different from customer's default address)
+  street  String
+  city    String
+  state   String
+  zipCode String
+
+  // Pricing
+  totalPrice    Decimal       @db.Decimal(10, 2)
+  paymentMethod PaymentMethod @default(CARD)
+  paymentStatus PaymentStatus @default(PENDING)
+
+  // Recurring booking info
+  recurringType    RecurringType @default(NONE)
+  recurringEndDate DateTime?
+  parentBookingId  String? // for recurring bookings
+  parentBooking    Booking?      @relation("RecurringBookings", fields: [parentBookingId], references: [id])
+  childBookings    Booking[]     @relation("RecurringBookings")
+
+  // Notes and instructions
+  specialInstructions String?
+  internalNotes       String?
+
+  // Completion details
+  completedAt  DateTime?
+  beforePhotos String[]  @default([])
+  afterPhotos  String[]  @default([])
+
+  // Relations
+  customer         Customer  @relation(fields: [customerId], references: [id])
+  customerId       String
+  service          Service   @relation(fields: [serviceId], references: [id])
+  serviceId        String
+  business         Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId       String
+  assignedEmployee Employee? @relation(fields: [employeeId], references: [id])
+  employeeId       String?
+
+  // Add-ons
+  addOns BookingAddOn[]
+  review Review?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId, status])
+  @@index([customerId])
+  @@index([scheduledDate])
+  @@index([businessId, scheduledDate])
+  @@map("bookings")
 }
 
+// Junction table for booking add-ons
+model BookingAddOn {
+  id String @id @default(uuid())
+
+  booking   Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId String
+  addOn     ServiceAddOn @relation(fields: [addOnId], references: [id])
+  addOnId   String
+
+  // Price at time of booking (for historical accuracy)
+  priceAtTime Decimal @db.Decimal(10, 2)
+
+  @@unique([bookingId, addOnId])
+  @@map("booking_add_ons")
+}
+
+// Customer reviews and ratings
+model Review {
+  id       String  @id @default(uuid())
+  rating   Int // 1-5 stars
+  comment  String?
+  isPublic Boolean @default(true)
+
+  // Relations
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+  bookingId  String   @unique
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+
+  createdAt DateTime @default(now())
+
+  @@index([businessId, rating])
+  @@map("reviews")
+}
+
+// Marketing campaigns
+model Campaign {
+  id        String       @id @default(uuid())
+  name      String
+  type      CampaignType
+  budget    Decimal?     @db.Decimal(10, 2)
+  startDate DateTime
+  endDate   DateTime?
+  isActive  Boolean      @default(true)
+
+  // Target audience (JSON field)
+  targetAudience Json @default("{}")
+
+  // Ad content (JSON field)
+  adContent Json @default("{}")
+
+  // Performance metrics
+  impressions Int     @default(0)
+  clicks      Int     @default(0)
+  conversions Int     @default(0)
+  spend       Decimal @default(0) @db.Decimal(10, 2)
+
+  // Relations
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+  leads      Lead[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("campaigns")
+}
+
+// Marketing leads
+model Lead {
+  id        String     @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String
+  phone     String?
+  source    String // where the lead came from
+  status    LeadStatus @default(NEW)
+
+  // Lead details
+  interestedIn String? // service they're interested in
+  notes        String?
+
+  // Conversion
+  convertedAt DateTime?
+  customerId  String? // if converted to customer
+
+  // Relations
+  campaign   Campaign? @relation(fields: [campaignId], references: [id])
+  campaignId String?
+  business   Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([businessId, status])
+  @@map("leads")
+}
+
+// System notifications
+model Notification {
+  id      String           @id @default(uuid())
+  title   String
+  message String
+  type    NotificationType
+  isRead  Boolean          @default(false)
+
+  // Relations
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+
+  createdAt DateTime @default(now())
+
+  @@index([businessId, isRead])
+  @@map("notifications")
+}
+
+// Refresh tokens for JWT authentication
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  expiresAt DateTime
+  isRevoked Boolean  @default(false)
+
+  // Relations
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  businessId String
+
+  createdAt DateTime @default(now())
+
+  @@map("refresh_tokens")
+}
+
+// Enums
+enum EmployeeRole {
+  ADMIN
+  MANAGER
+  CLEANER
+}
+
+enum CustomerStatus {
+  POTENTIAL
+  ACTIVE
+  INACTIVE
+}
+
+enum PropertyType {
+  HOUSE
+  APARTMENT
+  OFFICE
+  COMMERCIAL
+}
+
+enum ContactMethod {
+  EMAIL
+  PHONE
+  SMS
+}
+
+enum NoteType {
+  GENERAL
+  SERVICE
+  COMPLAINT
+  COMPLIMENT
+}
+
+enum ServiceCategory {
+  REGULAR
+  DEEP
+  MOVE_IN
+  MOVE_OUT
+  COMMERCIAL
+  POST_CONSTRUCTION
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  CHECK
+  ONLINE
+  BANK_TRANSFER
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  PARTIAL
+  REFUNDED
+  FAILED
+}
+
+enum RecurringType {
+  NONE
+  WEEKLY
+  BIWEEKLY
+  MONTHLY
+  QUARTERLY
+}
+
+enum CampaignType {
+  GOOGLE_ADS
+  FACEBOOK
+  EMAIL
+  SMS
+  DIRECT_MAIL
+  REFERRAL
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CONVERTED
+  LOST
+}
+
+enum NotificationType {
+  BOOKING_CREATED
+  BOOKING_UPDATED
+  BOOKING_CANCELLED
+  PAYMENT_RECEIVED
+  REVIEW_RECEIVED
+  CAMPAIGN_UPDATE
+  SYSTEM_ALERT
+}
