@@ -1,6 +1,6 @@
-# 🧠 Git Best Practices for Clean Booker
+# Git Best Practices for Clean Booker
 
-## 🪾 Branching Strategy
+## Branching Strategy
 
 All branches must follow this naming convention:
 
@@ -20,7 +20,7 @@ All branches must follow this naming convention:
 
 ---
 
-## ✅ Commit Messages
+## Commit Messages
 
 1. Use **clear, concise, and descriptive** commit messages.
 2. Start with an imperative verb: `add`, `fix`, `update`, `remove`, `refactor`, etc.
@@ -36,7 +36,7 @@ All branches must follow this naming convention:
 
 ---
 
-## 🔀 Pull Requests (PR)
+## Pull Requests (PR)
 
 - Open all PRs to the `develop` branch (unless hotfixes).
 - **Squash commits** before merging for a clean history:
@@ -59,9 +59,9 @@ git rebase -i origin/develop
 
 ---
 
-## 🧹 General Git Rules
+## General Git Rules
 
-**🌿 Branch Management**
+**Branch Management**
 
 - Never commit directly to main or develop
 - Always create a feature branch from develop
@@ -72,7 +72,7 @@ git checkout develop
 git pull origin develop
 ```
 
-**🚫 Do NOT Commit**
+**Do NOT Commit**
 
 - Secrets or .env files
 - IDE configs (.vscode/, .idea/)

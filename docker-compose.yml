@@ -30,7 +30,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     ports:
-      - "3001:3001"
+      - "3000:3000"
     stdin_open: true
     tty: true # Keeps the container running for debugging
     working_dir: /app

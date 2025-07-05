@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-**CleanBooker** is a modern web application developed to support **KleenScape**, enabling customers to seamlessly schedule professional cleaning services online. Designed with both convenience and scalability in mind, the platform streamlines the entire booking and payment process while offering a admin dashboard for managing appointments, tracking revenue, and analyzing customer trends.
+**Clean Booker** is a modern web application developed to support **KleenScape**, enabling customers to seamlessly schedule professional cleaning services online. Designed with both convenience and scalability in mind, the platform streamlines the entire booking and payment process while offering a admin dashboard for managing appointments, tracking revenue, and analyzing customer trends.
 
 Optimized for both mobile and desktop use, CleanBooker features a responsive and intuitive user interface, ensuring a smooth experience across devices.
 
