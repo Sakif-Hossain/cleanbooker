@@ -1,0 +1,8 @@
+site_name: Clean Booker
+nav:
+  - Project Requirements: project_req.md
+  - Software Design: software_design.md
+  - Deployment Instruction: deployment_inst.md
+  - API Documentation: api_doc.md
+  - Git Best Practices: git_best_practices.md
+theme: readthedocs
