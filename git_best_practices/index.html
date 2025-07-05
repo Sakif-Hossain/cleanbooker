@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Git Best Practices - Clean Booker</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Git Best Practices";
+        var mkdocs_page_input_path = "git_best_practices.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Clean Booker
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../project_req/">Project Requirements</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../software_design/">Software Design</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deployment_inst/">Deployment Instruction</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../api_doc/">API Documentation</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Git Best Practices</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#branching-strategy">🪾 Branching Strategy</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#commit-messages">✅ Commit Messages</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pull-requests-pr">🔀 Pull Requests (PR)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#general-git-rules">🧹 General Git Rules</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Clean Booker</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Git Best Practices</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="git-best-practices-for-clean-booker">🧠 Git Best Practices for Clean Booker</h1>
+<h2 id="branching-strategy">🪾 Branching Strategy</h2>
+<p>All branches must follow this naming convention:</p>
+<ul>
+<li><strong>Backend</strong>: <code>username/server/short-description</code></li>
+<li><strong>Frontend</strong>: <code>username/client/short-description</code></li>
+<li><strong>Database</strong>: <code>username/db/short-description</code></li>
+<li><strong>DevOps</strong>: <code>username/devops/short-description</code></li>
+<li><strong>Documentation</strong>: <code>username/docs/short-description</code></li>
+</ul>
+<blockquote>
+<p>Use lowercase letters and hyphens. Avoid spaces and underscores.</p>
+</blockquote>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li><code>safwan/server/add-login-api</code></li>
+<li><code>safwan/client/fix-navbar-style</code></li>
+<li><code>safwan/docs/update-readme</code></li>
+</ul>
+<hr />
+<h2 id="commit-messages">✅ Commit Messages</h2>
+<ol>
+<li>Use <strong>clear, concise, and descriptive</strong> commit messages.</li>
+<li>Start with an imperative verb: <code>add</code>, <code>fix</code>, <code>update</code>, <code>remove</code>, <code>refactor</code>, etc.</li>
+<li>Optionally prefix with task ID if linked to a ticket or issue.</li>
+<li>Limit subject line to <strong>50 characters</strong>. Wrap the body at 72 characters if used.</li>
+</ol>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>add: implement JWT auth for login API</li>
+<li>fix: resolve null error in user controller</li>
+<li>update: change footer background color</li>
+<li>refactor: split booking component into smaller modules</li>
+</ul>
+<hr />
+<h2 id="pull-requests-pr">🔀 Pull Requests (PR)</h2>
+<ul>
+<li>Open all PRs to the <code>develop</code> branch (unless hotfixes).</li>
+<li><strong>Squash commits</strong> before merging for a clean history:</li>
+</ul>
+<pre><code class="language-bash">git rebase -i origin/develop
+</code></pre>
+<ul>
+<li>Use a descriptive title and body:<blockquote>
+<ul>
+<li><code>[123] Add validation to booking form</code></li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<p><strong>PR Checklist</strong></p>
+<ul>
+<li>Descriptive title and summary</li>
+<li>Code reviewed by at least one other person</li>
+<li>Commits squashed and cleaned</li>
+<li>No console.log or leftover comments</li>
+<li>Tests added/updated</li>
+<li>CI passes</li>
+</ul>
+<hr />
+<h2 id="general-git-rules">🧹 General Git Rules</h2>
+<p><strong>🌿 Branch Management</strong></p>
+<ul>
+<li>Never commit directly to main or develop</li>
+<li>Always create a feature branch from develop</li>
+<li>Keep local develop up to date:</li>
+</ul>
+<pre><code class="language-bash">git checkout develop
+git pull origin develop
+</code></pre>
+<p><strong>🚫 Do NOT Commit</strong></p>
+<ul>
+<li>Secrets or .env files</li>
+<li>IDE configs (.vscode/, .idea/)</li>
+<li>OS files like .DS_Store</li>
+<li>Auto-generated files (e.g., dist/, node_modules/)</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../api_doc/" class="btn btn-neutral float-left" title="API Documentation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../api_doc/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>API Documentation - Clean Booker</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "API Documentation";
+        var mkdocs_page_input_path = "api_doc.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Clean Booker
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../project_req/">Project Requirements</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../software_design/">Software Design</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../deployment_inst/">Deployment Instruction</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">API Documentation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#base-url">Base URL</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#authentication">Authentication</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#response-format">Response Format</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1-authentication-endpoints">1. Authentication Endpoints</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#post-authregister">POST /auth/register</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-authlogin">POST /auth/login</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-authrefresh">POST /auth/refresh</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-authlogout">POST /auth/logout</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-authforgot-password">POST /auth/forgot-password</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-authreset-password">POST /auth/reset-password</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-user-management">2. User Management</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-usersprofile">GET /users/profile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#put-usersprofile">PUT /users/profile</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-usersupload-avatar">POST /users/upload-avatar</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-customer-management-crm">3. Customer Management (CRM)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-customers">GET /customers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-customers">POST /customers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-customersid">GET /customers/:id</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#put-customersid">PUT /customers/:id</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#delete-customersid">DELETE /customers/:id</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-customersidbookings">GET /customers/:id/bookings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-customersidnotes">GET /customers/:id/notes</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-customersidnotes">POST /customers/:id/notes</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-services-management">4. Services Management</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-services">GET /services</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-services">POST /services</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#put-servicesid">PUT /services/:id</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#delete-servicesid">DELETE /services/:id</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-booking-management">5. Booking Management</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-bookings">GET /bookings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-bookings">POST /bookings</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-bookingsid">GET /bookings/:id</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#put-bookingsid">PUT /bookings/:id</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#put-bookingsidstatus">PUT /bookings/:id/status</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-bookingspublic">POST /bookings/public</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-calendar-scheduling">6. Calendar &amp; Scheduling</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-calendaravailability">GET /calendar/availability</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-calendarevents">GET /calendar/events</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7-analytics-reports">7. Analytics &amp; Reports</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-analyticsdashboard">GET /analytics/dashboard</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-analyticsrevenue">GET /analytics/revenue</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-analyticscustomers">GET /analytics/customers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-analyticsservices">GET /analytics/services</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#8-marketing-advertising">8. Marketing &amp; Advertising</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-marketingcampaigns">GET /marketing/campaigns</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-marketingcampaigns">POST /marketing/campaigns</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-marketingleads">GET /marketing/leads</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-marketingleads">POST /marketing/leads</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#9-notifications">9. Notifications</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-notifications">GET /notifications</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#put-notificationsidread">PUT /notifications/:id/read</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-notificationspreferences">POST /notifications/preferences</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#10-reviews-feedback">10. Reviews &amp; Feedback</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#get-reviews">GET /reviews</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-reviewsrequest">POST /reviews/request</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#11-integration-endpoints">11. Integration Endpoints</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#post-integrationsgoogle-calendar">POST /integrations/google-calendar</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#post-integrationsquickbooks">POST /integrations/quickbooks</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#get-integrationsstatus">GET /integrations/status</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#error-codes">Error Codes</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#rate-limiting">Rate Limiting</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#webhooks">Webhooks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#suggested-improvements">Suggested Improvements</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#1-advanced-features">1. Advanced Features</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#2-enhanced-customer-experience">2. Enhanced Customer Experience</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#3-business-intelligence">3. Business Intelligence</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#4-technical-enhancements">4. Technical Enhancements</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#5-integrations">5. Integrations</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#6-security-compliance">6. Security &amp; Compliance</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../git_best_practices/">Git Best Practices</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Clean Booker</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">API Documentation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="cleaning-service-crm-advertising-api-documentation">Cleaning Service CRM &amp; Advertising API Documentation</h1>
+<h2 id="overview">Overview</h2>
+<p>This API serves a web application designed for cleaning service businesses to manage customer relationships, bookings, and advertising campaigns.</p>
+<h2 id="base-url">Base URL</h2>
+<pre><code>https://api.cleanbooker.com/v1
+</code></pre>
+<h2 id="authentication">Authentication</h2>
+<p>All authenticated endpoints require a Bearer token in the Authorization header:</p>
+<pre><code>Authorization: Bearer &lt;jwt_token&gt;
+</code></pre>
+<h2 id="response-format">Response Format</h2>
+<p>All responses follow this structure:</p>
+<pre><code class="language-json">{
+  &quot;success&quot;: boolean,
+  &quot;data&quot;: object | array | null,
+  &quot;message&quot;: string,
+  &quot;errors&quot;: array | null,
+  &quot;meta&quot;: {
+    &quot;timestamp&quot;: &quot;ISO 8601 datetime&quot;,
+    &quot;requestId&quot;: &quot;unique_request_id&quot;
+  }
+}
+</code></pre>
+<hr />
+<h2 id="1-authentication-endpoints">1. Authentication Endpoints</h2>
+<h3 id="post-authregister">POST /auth/register</h3>
+<p>Register a new business account</p>
+<pre><code class="language-json">{
+  &quot;businessName&quot;: &quot;string (required)&quot;,
+  &quot;ownerName&quot;: &quot;string (required)&quot;,
+  &quot;email&quot;: &quot;string (required, unique)&quot;,
+  &quot;password&quot;: &quot;string (required, min 8 chars)&quot;,
+  &quot;phone&quot;: &quot;string (required)&quot;,
+  &quot;address&quot;: {
+    &quot;street&quot;: &quot;string (required)&quot;,
+    &quot;city&quot;: &quot;string (required)&quot;,
+    &quot;state&quot;: &quot;string (required)&quot;,
+    &quot;zipCode&quot;: &quot;string (required)&quot;,
+    &quot;country&quot;: &quot;string (default: US)&quot;
+  },
+  &quot;serviceArea&quot;: [&quot;string&quot;] // Array of zip codes or city names
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;user&quot;: {
+      &quot;id&quot;: &quot;uuid&quot;,
+      &quot;businessName&quot;: &quot;string&quot;,
+      &quot;email&quot;: &quot;string&quot;,
+      &quot;role&quot;: &quot;admin&quot;,
+      &quot;isVerified&quot;: false
+    },
+    &quot;token&quot;: &quot;jwt_token&quot;,
+    &quot;refreshToken&quot;: &quot;refresh_token&quot;
+  }
+}
+</code></pre>
+<h3 id="post-authlogin">POST /auth/login</h3>
+<p>Login to existing account</p>
+<pre><code class="language-json">{
+  &quot;email&quot;: &quot;string (required)&quot;,
+  &quot;password&quot;: &quot;string (required)&quot;
+}
+</code></pre>
+<h3 id="post-authrefresh">POST /auth/refresh</h3>
+<p>Refresh access token</p>
+<pre><code class="language-json">{
+  &quot;refreshToken&quot;: &quot;string (required)&quot;
+}
+</code></pre>
+<h3 id="post-authlogout">POST /auth/logout</h3>
+<p>Logout and invalidate tokens</p>
+<pre><code class="language-json">{
+  &quot;refreshToken&quot;: &quot;string (required)&quot;
+}
+</code></pre>
+<h3 id="post-authforgot-password">POST /auth/forgot-password</h3>
+<p>Request password reset</p>
+<pre><code class="language-json">{
+  &quot;email&quot;: &quot;string (required)&quot;
+}
+</code></pre>
+<h3 id="post-authreset-password">POST /auth/reset-password</h3>
+<p>Reset password with token</p>
+<pre><code class="language-json">{
+  &quot;token&quot;: &quot;string (required)&quot;,
+  &quot;newPassword&quot;: &quot;string (required)&quot;
+}
+</code></pre>
+<hr />
+<h2 id="2-user-management">2. User Management</h2>
+<h3 id="get-usersprofile">GET /users/profile</h3>
+<p>Get current user profile</p>
+<h3 id="put-usersprofile">PUT /users/profile</h3>
+<p>Update user profile</p>
+<pre><code class="language-json">{
+  &quot;businessName&quot;: &quot;string&quot;,
+  &quot;ownerName&quot;: &quot;string&quot;,
+  &quot;phone&quot;: &quot;string&quot;,
+  &quot;address&quot;: {
+    &quot;street&quot;: &quot;string&quot;,
+    &quot;city&quot;: &quot;string&quot;,
+    &quot;state&quot;: &quot;string&quot;,
+    &quot;zipCode&quot;: &quot;string&quot;
+  },
+  &quot;serviceArea&quot;: [&quot;string&quot;],
+  &quot;businessHours&quot;: {
+    &quot;monday&quot;: { &quot;open&quot;: &quot;09:00&quot;, &quot;close&quot;: &quot;17:00&quot;, &quot;closed&quot;: false },
+    &quot;tuesday&quot;: { &quot;open&quot;: &quot;09:00&quot;, &quot;close&quot;: &quot;17:00&quot;, &quot;closed&quot;: false }
+    // ... other days
+  }
+}
+</code></pre>
+<h3 id="post-usersupload-avatar">POST /users/upload-avatar</h3>
+<p>Upload business logo/avatar</p>
+<ul>
+<li>Multipart form data with image file</li>
+</ul>
+<hr />
+<h2 id="3-customer-management-crm">3. Customer Management (CRM)</h2>
+<h3 id="get-customers">GET /customers</h3>
+<p>Get customers list with pagination and filters
+<strong>Query Parameters:</strong></p>
+<ul>
+<li><code>page</code>: number (default: 1)</li>
+<li><code>limit</code>: number (default: 20, max: 100)</li>
+<li><code>search</code>: string (search by name, email, phone)</li>
+<li><code>status</code>: enum (active, inactive, potential)</li>
+<li><code>sortBy</code>: enum (name, email, createdAt, lastService)</li>
+<li><code>sortOrder</code>: enum (asc, desc)</li>
+</ul>
+<h3 id="post-customers">POST /customers</h3>
+<p>Create new customer</p>
+<pre><code class="language-json">{
+  &quot;firstName&quot;: &quot;string (required)&quot;,
+  &quot;lastName&quot;: &quot;string (required)&quot;,
+  &quot;email&quot;: &quot;string (required)&quot;,
+  &quot;phone&quot;: &quot;string (required)&quot;,
+  &quot;address&quot;: {
+    &quot;street&quot;: &quot;string (required)&quot;,
+    &quot;city&quot;: &quot;string (required)&quot;,
+    &quot;state&quot;: &quot;string (required)&quot;,
+    &quot;zipCode&quot;: &quot;string (required)&quot;
+  },
+  &quot;propertyType&quot;: &quot;enum (house, apartment, office, commercial)&quot;,
+  &quot;propertySize&quot;: &quot;number&quot;, // square feet
+  &quot;specialInstructions&quot;: &quot;string&quot;,
+  &quot;preferredContactMethod&quot;: &quot;enum (email, phone, sms)&quot;,
+  &quot;status&quot;: &quot;enum (potential, active, inactive)&quot;
+}
+</code></pre>
+<h3 id="get-customersid">GET /customers/:id</h3>
+<p>Get customer details</p>
+<h3 id="put-customersid">PUT /customers/:id</h3>
+<p>Update customer information</p>
+<h3 id="delete-customersid">DELETE /customers/:id</h3>
+<p>Delete customer (soft delete)</p>
+<h3 id="get-customersidbookings">GET /customers/:id/bookings</h3>
+<p>Get customer's booking history</p>
+<h3 id="get-customersidnotes">GET /customers/:id/notes</h3>
+<p>Get customer notes</p>
+<h3 id="post-customersidnotes">POST /customers/:id/notes</h3>
+<p>Add customer note</p>
+<pre><code class="language-json">{
+  &quot;content&quot;: &quot;string (required)&quot;,
+  &quot;type&quot;: &quot;enum (general, service, complaint, compliment)&quot;
+}
+</code></pre>
+<hr />
+<h2 id="4-services-management">4. Services Management</h2>
+<h3 id="get-services">GET /services</h3>
+<p>Get available services</p>
+<h3 id="post-services">POST /services</h3>
+<p>Create new service</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;string (required)&quot;,
+  &quot;description&quot;: &quot;string&quot;,
+  &quot;basePrice&quot;: &quot;number (required)&quot;,
+  &quot;duration&quot;: &quot;number (required)&quot;, // minutes
+  &quot;category&quot;: &quot;enum (regular, deep, move-in, move-out, commercial)&quot;,
+  &quot;addOns&quot;: [
+    {
+      &quot;name&quot;: &quot;string&quot;,
+      &quot;price&quot;: &quot;number&quot;,
+      &quot;duration&quot;: &quot;number&quot;
+    }
+  ],
+  &quot;isActive&quot;: &quot;boolean (default: true)&quot;
+}
+</code></pre>
+<h3 id="put-servicesid">PUT /services/:id</h3>
+<p>Update service</p>
+<h3 id="delete-servicesid">DELETE /services/:id</h3>
+<p>Delete service</p>
+<hr />
+<h2 id="5-booking-management">5. Booking Management</h2>
+<h3 id="get-bookings">GET /bookings</h3>
+<p>Get bookings with filters
+<strong>Query Parameters:</strong></p>
+<ul>
+<li><code>page</code>, <code>limit</code>: pagination</li>
+<li><code>status</code>: enum (pending, confirmed, in-progress, completed, cancelled)</li>
+<li><code>date</code>: ISO date (filter by specific date)</li>
+<li><code>dateRange</code>: object { "start": "ISO date", "end": "ISO date" }</li>
+<li><code>customerId</code>: uuid</li>
+<li><code>serviceId</code>: uuid</li>
+</ul>
+<h3 id="post-bookings">POST /bookings</h3>
+<p>Create new booking</p>
+<pre><code class="language-json">{
+  &quot;customerId&quot;: &quot;uuid (required)&quot;,
+  &quot;serviceId&quot;: &quot;uuid (required)&quot;,
+  &quot;scheduledDate&quot;: &quot;ISO datetime (required)&quot;,
+  &quot;estimatedDuration&quot;: &quot;number (required)&quot;, // minutes
+  &quot;address&quot;: {
+    &quot;street&quot;: &quot;string (required)&quot;,
+    &quot;city&quot;: &quot;string (required)&quot;,
+    &quot;state&quot;: &quot;string (required)&quot;,
+    &quot;zipCode&quot;: &quot;string (required)&quot;
+  },
+  &quot;addOns&quot;: [&quot;uuid&quot;], // array of add-on service IDs
+  &quot;specialInstructions&quot;: &quot;string&quot;,
+  &quot;totalPrice&quot;: &quot;number (required)&quot;,
+  &quot;paymentMethod&quot;: &quot;enum (cash, card, check, online)&quot;,
+  &quot;recurringType&quot;: &quot;enum (none, weekly, biweekly, monthly)&quot;,
+  &quot;recurringEndDate&quot;: &quot;ISO date&quot; // if recurring
+}
+</code></pre>
+<h3 id="get-bookingsid">GET /bookings/:id</h3>
+<p>Get booking details</p>
+<h3 id="put-bookingsid">PUT /bookings/:id</h3>
+<p>Update booking</p>
+<h3 id="put-bookingsidstatus">PUT /bookings/:id/status</h3>
+<p>Update booking status</p>
+<pre><code class="language-json">{
+  &quot;status&quot;: &quot;enum (confirmed, in-progress, completed, cancelled)&quot;,
+  &quot;notes&quot;: &quot;string&quot;
+}
+</code></pre>
+<h3 id="post-bookingspublic">POST /bookings/public</h3>
+<p>Public booking endpoint (for website booking form)</p>
+<pre><code class="language-json">{
+  &quot;customer&quot;: {
+    &quot;firstName&quot;: &quot;string (required)&quot;,
+    &quot;lastName&quot;: &quot;string (required)&quot;,
+    &quot;email&quot;: &quot;string (required)&quot;,
+    &quot;phone&quot;: &quot;string (required)&quot;,
+    &quot;address&quot;: {
+      &quot;street&quot;: &quot;string (required)&quot;,
+      &quot;city&quot;: &quot;string (required)&quot;,
+      &quot;state&quot;: &quot;string (required)&quot;,
+      &quot;zipCode&quot;: &quot;string (required)&quot;
+    }
+  },
+  &quot;serviceId&quot;: &quot;uuid (required)&quot;,
+  &quot;preferredDate&quot;: &quot;ISO date (required)&quot;,
+  &quot;preferredTime&quot;: &quot;string (required)&quot;, // HH:MM format
+  &quot;alternativeDate&quot;: &quot;ISO date&quot;,
+  &quot;alternativeTime&quot;: &quot;string&quot;,
+  &quot;addOns&quot;: [&quot;uuid&quot;],
+  &quot;specialInstructions&quot;: &quot;string&quot;,
+  &quot;propertyType&quot;: &quot;enum (house, apartment, office, commercial)&quot;,
+  &quot;propertySize&quot;: &quot;number&quot;,
+  &quot;howDidYouHear&quot;: &quot;string&quot;
+}
+</code></pre>
+<hr />
+<h2 id="6-calendar-scheduling">6. Calendar &amp; Scheduling</h2>
+<h3 id="get-calendaravailability">GET /calendar/availability</h3>
+<p>Check availability for booking
+<strong>Query Parameters:</strong></p>
+<ul>
+<li><code>date</code>: ISO date (required)</li>
+<li><code>serviceId</code>: uuid (required)</li>
+<li><code>duration</code>: number (required, in minutes)</li>
+</ul>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;availableSlots&quot;: [
+      {
+        &quot;startTime&quot;: &quot;HH:MM&quot;,
+        &quot;endTime&quot;: &quot;HH:MM&quot;
+      }
+    ]
+  }
+}
+</code></pre>
+<h3 id="get-calendarevents">GET /calendar/events</h3>
+<p>Get calendar events for dashboard
+<strong>Query Parameters:</strong></p>
+<ul>
+<li><code>start</code>: ISO date</li>
+<li><code>end</code>: ISO date</li>
+</ul>
+<hr />
+<h2 id="7-analytics-reports">7. Analytics &amp; Reports</h2>
+<h3 id="get-analyticsdashboard">GET /analytics/dashboard</h3>
+<p>Get dashboard analytics</p>
+<pre><code class="language-json">{
+  &quot;period&quot;: &quot;enum (today, week, month, quarter, year, custom)&quot;,
+  &quot;startDate&quot;: &quot;ISO date&quot;, // required if period is custom
+  &quot;endDate&quot;: &quot;ISO date&quot; // required if period is custom
+}
+</code></pre>
+<p><strong>Response:</strong></p>
+<pre><code class="language-json">{
+  &quot;success&quot;: true,
+  &quot;data&quot;: {
+    &quot;totalRevenue&quot;: &quot;number&quot;,
+    &quot;totalBookings&quot;: &quot;number&quot;,
+    &quot;completedServices&quot;: &quot;number&quot;,
+    &quot;newCustomers&quot;: &quot;number&quot;,
+    &quot;customerRetentionRate&quot;: &quot;number&quot;,
+    &quot;averageBookingValue&quot;: &quot;number&quot;,
+    &quot;popularServices&quot;: [
+      {
+        &quot;serviceId&quot;: &quot;uuid&quot;,
+        &quot;serviceName&quot;: &quot;string&quot;,
+        &quot;bookingCount&quot;: &quot;number&quot;,
+        &quot;revenue&quot;: &quot;number&quot;
+      }
+    ],
+    &quot;revenueByMonth&quot;: [
+      {
+        &quot;month&quot;: &quot;YYYY-MM&quot;,
+        &quot;revenue&quot;: &quot;number&quot;,
+        &quot;bookings&quot;: &quot;number&quot;
+      }
+    ],
+    &quot;bookingStatusBreakdown&quot;: {
+      &quot;pending&quot;: &quot;number&quot;,
+      &quot;confirmed&quot;: &quot;number&quot;,
+      &quot;completed&quot;: &quot;number&quot;,
+      &quot;cancelled&quot;: &quot;number&quot;
+    }
+  }
+}
+</code></pre>
+<h3 id="get-analyticsrevenue">GET /analytics/revenue</h3>
+<p>Get detailed revenue analytics</p>
+<h3 id="get-analyticscustomers">GET /analytics/customers</h3>
+<p>Get customer analytics</p>
+<h3 id="get-analyticsservices">GET /analytics/services</h3>
+<p>Get service performance analytics</p>
+<hr />
+<h2 id="8-marketing-advertising">8. Marketing &amp; Advertising</h2>
+<h3 id="get-marketingcampaigns">GET /marketing/campaigns</h3>
+<p>Get advertising campaigns</p>
+<h3 id="post-marketingcampaigns">POST /marketing/campaigns</h3>
+<p>Create new campaign</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;string (required)&quot;,
+  &quot;type&quot;: &quot;enum (google-ads, facebook, email, sms)&quot;,
+  &quot;budget&quot;: &quot;number&quot;,
+  &quot;startDate&quot;: &quot;ISO date (required)&quot;,
+  &quot;endDate&quot;: &quot;ISO date&quot;,
+  &quot;targetAudience&quot;: {
+    &quot;ageRange&quot;: { &quot;min&quot;: &quot;number&quot;, &quot;max&quot;: &quot;number&quot; },
+    &quot;locations&quot;: [&quot;string&quot;],
+    &quot;interests&quot;: [&quot;string&quot;]
+  },
+  &quot;adContent&quot;: {
+    &quot;headline&quot;: &quot;string&quot;,
+    &quot;description&quot;: &quot;string&quot;,
+    &quot;imageUrl&quot;: &quot;string&quot;,
+    &quot;callToAction&quot;: &quot;string&quot;
+  },
+  &quot;isActive&quot;: &quot;boolean&quot;
+}
+</code></pre>
+<h3 id="get-marketingleads">GET /marketing/leads</h3>
+<p>Get marketing leads</p>
+<h3 id="post-marketingleads">POST /marketing/leads</h3>
+<p>Convert lead to customer</p>
+<pre><code class="language-json">{
+  &quot;leadId&quot;: &quot;uuid (required)&quot;,
+  &quot;customerId&quot;: &quot;uuid (required)&quot;
+}
+</code></pre>
+<hr />
+<h2 id="9-notifications">9. Notifications</h2>
+<h3 id="get-notifications">GET /notifications</h3>
+<p>Get user notifications</p>
+<h3 id="put-notificationsidread">PUT /notifications/:id/read</h3>
+<p>Mark notification as read</p>
+<h3 id="post-notificationspreferences">POST /notifications/preferences</h3>
+<p>Update notification preferences</p>
+<pre><code class="language-json">{
+  &quot;emailNotifications&quot;: {
+    &quot;newBookings&quot;: &quot;boolean&quot;,
+    &quot;cancellations&quot;: &quot;boolean&quot;,
+    &quot;payments&quot;: &quot;boolean&quot;,
+    &quot;reviews&quot;: &quot;boolean&quot;
+  },
+  &quot;smsNotifications&quot;: {
+    &quot;appointmentReminders&quot;: &quot;boolean&quot;,
+    &quot;statusUpdates&quot;: &quot;boolean&quot;
+  },
+  &quot;pushNotifications&quot;: {
+    &quot;enabled&quot;: &quot;boolean&quot;
+  }
+}
+</code></pre>
+<hr />
+<h2 id="10-reviews-feedback">10. Reviews &amp; Feedback</h2>
+<h3 id="get-reviews">GET /reviews</h3>
+<p>Get customer reviews</p>
+<h3 id="post-reviewsrequest">POST /reviews/request</h3>
+<p>Send review request to customer</p>
+<pre><code class="language-json">{
+  &quot;bookingId&quot;: &quot;uuid (required)&quot;,
+  &quot;customerId&quot;: &quot;uuid (required)&quot;
+}
+</code></pre>
+<hr />
+<h2 id="11-integration-endpoints">11. Integration Endpoints</h2>
+<h3 id="post-integrationsgoogle-calendar">POST /integrations/google-calendar</h3>
+<p>Connect Google Calendar integration</p>
+<h3 id="post-integrationsquickbooks">POST /integrations/quickbooks</h3>
+<p>Connect QuickBooks integration</p>
+<h3 id="get-integrationsstatus">GET /integrations/status</h3>
+<p>Get integration status</p>
+<hr />
+<h2 id="error-codes">Error Codes</h2>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>400</td>
+<td>Bad Request - Invalid request data</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized - Invalid or missing token</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden - Insufficient permissions</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found - Resource not found</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Conflict - Resource already exists</td>
+</tr>
+<tr>
+<td>422</td>
+<td>Unprocessable Entity - Validation errors</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests - Rate limit exceeded</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rate-limiting">Rate Limiting</h2>
+<ul>
+<li>100 requests per minute for authenticated users</li>
+<li>20 requests per minute for public endpoints</li>
+<li>1000 requests per hour for dashboard analytics</li>
+</ul>
+<h2 id="webhooks">Webhooks</h2>
+<p>Configure webhooks to receive real-time updates:</p>
+<ul>
+<li><code>booking.created</code></li>
+<li><code>booking.updated</code></li>
+<li><code>booking.cancelled</code></li>
+<li><code>payment.completed</code></li>
+<li><code>review.received</code></li>
+</ul>
+<h2 id="suggested-improvements">Suggested Improvements</h2>
+<h3 id="1-advanced-features">1. Advanced Features</h3>
+<ul>
+<li><strong>AI-powered scheduling optimization</strong>: Suggest optimal routes and time slots</li>
+<li><strong>Automated customer segmentation</strong>: Group customers by behavior, value, etc.</li>
+<li><strong>Dynamic pricing</strong>: Adjust prices based on demand, location, time</li>
+<li><strong>Inventory management</strong>: Track cleaning supplies and equipment</li>
+<li><strong>Employee management</strong>: Schedule staff, track performance</li>
+<li><strong>Multi-location support</strong>: Manage multiple business locations</li>
+</ul>
+<h3 id="2-enhanced-customer-experience">2. Enhanced Customer Experience</h3>
+<ul>
+<li><strong>Real-time tracking</strong>: GPS tracking of cleaning teams</li>
+<li><strong>Photo documentation</strong>: Before/after service photos</li>
+<li><strong>Customer portal</strong>: Self-service booking management</li>
+<li><strong>Loyalty program</strong>: Points, rewards, referral bonuses</li>
+<li><strong>Service customization</strong>: Detailed cleaning checklists</li>
+</ul>
+<h3 id="3-business-intelligence">3. Business Intelligence</h3>
+<ul>
+<li><strong>Predictive analytics</strong>: Forecast demand and revenue</li>
+<li><strong>Customer lifetime value</strong>: Calculate CLV for better decisions</li>
+<li><strong>Churn prediction</strong>: Identify at-risk customers</li>
+<li><strong>Market analysis</strong>: Local competition and pricing insights</li>
+</ul>
+<h3 id="4-technical-enhancements">4. Technical Enhancements</h3>
+<ul>
+<li><strong>Real-time notifications</strong>: WebSocket support for live updates</li>
+<li><strong>Offline support</strong>: PWA capabilities for field workers</li>
+<li><strong>API versioning</strong>: Support multiple API versions</li>
+<li><strong>GraphQL endpoint</strong>: Alternative to REST for complex queries</li>
+<li><strong>Bulk operations</strong>: Import/export customers, bulk updates</li>
+</ul>
+<h3 id="5-integrations">5. Integrations</h3>
+<ul>
+<li><strong>Payment processing</strong>: Stripe, Square, PayPal</li>
+<li><strong>SMS service</strong>: Twilio for customer communications</li>
+<li><strong>Email marketing</strong>: Mailchimp, Constant Contact</li>
+<li><strong>Accounting</strong>: QuickBooks, Xero integration</li>
+<li><strong>Background checks</strong>: For employee verification</li>
+<li><strong>Insurance</strong>: Liability and bonding verification</li>
+</ul>
+<h3 id="6-security-compliance">6. Security &amp; Compliance</h3>
+<ul>
+<li><strong>Two-factor authentication</strong>: Enhanced security</li>
+<li><strong>GDPR compliance</strong>: Data privacy controls</li>
+<li><strong>PCI compliance</strong>: Secure payment handling</li>
+<li><strong>Audit logs</strong>: Track all system changes</li>
+<li><strong>Role-based permissions</strong>: Granular access control</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../deployment_inst/" class="btn btn-neutral float-left" title="Deployment Instruction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../git_best_practices/" class="btn btn-neutral float-right" title="Git Best Practices">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../deployment_inst/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../git_best_practices/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
