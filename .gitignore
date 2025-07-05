@@ -140,3 +140,6 @@ venv
 
 # mac stuff
 *.DS_Store
+
+# mkdocs
+site/

@@ -31,3 +31,7 @@ export interface CustomerQuery extends PaginationQuery {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }
+
+export type ServiceQuery = z.infer<typeof serviceQuerySchema>;
+export type BookingQuery = z.infer<typeof bookingQuerySchema>;
+export type AnalyticsQuery = z.infer<typeof analyticsQuerySchema>;
