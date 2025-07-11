@@ -41,6 +41,22 @@ services:
       - ./server/.env
     networks:
       - prisma-network
+
+  client:
+    container_name: cleanbooker_frontend
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    depends_on:
+      - server
+    env_file:
+      - ./client/.env
+    networks:
+      - prisma-network
+
   prisma-studio:
     image: node:lts-alpine3.17
     working_dir: /app
